@@ -31,12 +31,23 @@ class App extends React.Component {
   }
 
   updateTicketElapsedWaitTime() {
+    const { dispatch } = this.props;
+    Object.keys(this.props.masterTicketList).map(ticketId => {
+      const ticket = this.props.masterTicketList[ticketId];
+      const newFormattedWaitTime = ticket.timeOpen.fromNow(true);
+      const action = {
+        type: 'UPDATE_TIME',
+        id: ticketId,
+        formattedWaitTime: newFormattedWaitTime
+      };
+      dispatch(action);
     // var newMasterTicketList = Object.assign({}, this.state.masterTicketList);
     // Object.keys(newMasterTicketList).forEach(ticketId => {
     //   newMasterTicketList[ticketId].formattedWaitTime = (newMasterTicketList[ticketId].timeOpen).fromNow(true);
     // });
     // this.setState({masterTicketList: newMasterTicketList});
-  }
+  });
+}
 
   // handleChangingSelectedTicket(ticketId){
   //   this.setState({selectedTicket: ticketId});
@@ -46,7 +57,7 @@ class App extends React.Component {
     return (
       <div>
         <Header/>
-  
+
         <Switch>
           <Route exact path='/' render={()=><TicketList ticketList={this.props.masterTicketList} />} />
           <Route path='/newticket' render={()=><NewTicketControl />} />
